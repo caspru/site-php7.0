@@ -82,6 +82,10 @@ CMD ["/start.sh"]
 #RUN make
 #RUN checkinstall
 
+#COMPOSER
+RUN php composer-setup.php --install-dir=bin --filename=composer
+
+
 #CLEAN
 RUN apt-get remove -y gcc make libjpeg-dev libpng-dev libtiff-dev libvpx-dev libxpm-dev libfontconfig1-dev libxpm-dev checkinstall  libfreetype6-dev \
         libjpeg62-turbo-dev \
