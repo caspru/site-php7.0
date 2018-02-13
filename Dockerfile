@@ -24,6 +24,37 @@ RUN make
 RUN checkinstall --pkgname=libgd3
 
 
+RUN { \
+                echo 'opcache.memory_consumption=128'; \
+                echo 'opcache.interned_strings_buffer=8'; \
+                echo 'opcache.max_accelerated_files=4000'; \
+                echo 'opcache.revalidate_freq=60'; \
+                echo 'opcache.fast_shutdown=1'; \
+                echo 'opcache.enable_cli=1'; \
+} > /usr/local/etc/php/conf.d/opcache-recommended.ini
+
+ENV PHANTOMJS phantomjs-2.1.1-linux-x86_64
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends \
+        libmcrypt-dev zlib1g-dev git libgmp-dev \
+        libfreetype6-dev libjpeg62-turbo-dev libpng12-dev \
+        build-essential chrpath libssl-dev libxft-dev \
+        libfreetype6 libfontconfig1 libfontconfig1-dev \
+    && ln -s /usr/include/x86_64-linux-gnu/gmp.h /usr/local/include/ \
+    && docker-php-ext-configure gd --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/include/ \
+    && docker-php-ext-configure gmp \
+    && docker-php-ext-install iconv mcrypt mbstring pdo pdo_mysql zip gd gmp opcache \
+    && curl -o ${PHANTOMJS}.tar.bz2 -SL https://bitbucket.org/ariya/phantomjs/downloads/${PHANTOMJS}.tar.bz2 \
+    && tar xvjf ${PHANTOMJS}.tar.bz2 \
+    && rm ${PHANTOMJS}.tar.bz2 \
+    && mv ${PHANTOMJS} /usr/local/share \
+    && ln -sf /usr/local/share/${PHANTOMJS}/bin/phantomjs /usr/local/bin \
+    && rm -rf /var/lib/apt/lists/*
+
+
+ENV PHANTOMJS_BIN_PATH /usr/local/bin/phantomjs
+
+
 
 RUN docker-php-ext-configure gd --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/include/ --with-gd=/usr/src/libgd-2.1.1/src/ \
         && docker-php-ext-install gd \
@@ -88,6 +119,8 @@ RUN cd /home/sftpdev/ && \
     php -r "if (hash_file('SHA384', 'composer-setup.php') === '544e09ee996cdf60ece3804abc52599c22b1f40f4323403c44d44fdfdd586475ca9813a858088ffbc1f233e9b180f061') { echo 'Installer verified'; } else { echo 'Installer corrupt'; unlink('composer-setup.php'); } echo PHP_EOL;" && \
     php composer-setup.php && \
     php -r "unlink('composer-setup.php');"
+
+
 
 RUN chown 33:33 /var/www/
 
