@@ -91,6 +91,8 @@ RUN ln -s /var/www/html /home/sftpdev/html -f
 RUN mkdir /var/run/sshd; chmod 0755 /var/run/sshd
 RUN sed -i "s/Listen 80/Listen 81/g" /etc/apache2/ports.conf
 
+RUN rm -rf /etc/apache2/sites-enabled/*
+ADD apache-default-vhost.conf /etc/apache2/sites-enabled/
 ADD nginx.conf /etc/nginx/
 
 RUN echo "DOCKER PHP_VERSION=$PHP_VERSION; BUILD DATE: `date -I`" > /etc/motd
@@ -103,15 +105,6 @@ WORKDIR /home/sftpdev
 ADD start.sh /
 CMD ["/start.sh"]
 
-
-#RUN apt-get install wget -y
-#RUN wget https://github.com/libgd/libgd/releases/download/gd-2.1.1/libgd-2.1.1.tar.gz
-#RUN tar zxvf libgd-2.1.1.tar.gz
-#WORKDIR /usr/src/libgd-2.1.1
-#RUN apt-get install gcc make libjpeg-dev libpng-dev libtiff-dev libvpx-dev libxpm-dev libfontconfig1-dev libxpm-dev checkinstall -y
-#RUN ./configure
-#RUN make
-#RUN checkinstall
 
 #COMPOSER
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
