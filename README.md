@@ -2,7 +2,7 @@ example docker-compose.yml
 
 ```
 example.com:
- image: casp/site-php5
+ image: casp/site-php7.0
  restart: always
  container_name: example.com
  hostname: example.com
