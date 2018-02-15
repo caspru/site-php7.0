@@ -12,7 +12,7 @@ if [ -e SFTPDEV_PASSWD ]; then
 	echo "sftpdev:$SFTPDEV_PASSWD" | chpasswd
 fi
 
-[ ! -e $WEB_DOCUMENTROOT ] && export WEB_DOCUMENTROOT=/var/www/html
+[ -e $WEB_DOCUMENTROOT ] && export WEB_DOCUMENTROOT=/var/www/html
 
 echo Set WEB_DOCUMENTROOT to $WEB_DOCUMENTROOT ...
 sed -i "s,_WEB_DOCUMENTROOT_,$WEB_DOCUMENTROOT,g" /etc/apache2/sites-enabled/apache-default-vhost.conf
