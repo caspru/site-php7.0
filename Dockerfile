@@ -2,6 +2,7 @@ FROM php:7.0-apache
 RUN apt-get update && \
 apt-get install -y wget nginx supervisor libapache2-mod-rpaf sudo git mc net-tools openssh-server mysql-client vim nano msmtp \
 	cron gcc make libjpeg-dev libpng-dev libtiff-dev libvpx-dev libxpm-dev libfontconfig1-dev libxpm-dev checkinstall \
+	libicu-dev \
         libfreetype6-dev \
         libjpeg62-turbo-dev \
         libmcrypt-dev \
@@ -64,11 +65,9 @@ RUN docker-php-ext-configure gd --with-freetype-dir=/usr/include/ --with-jpeg-di
 RUN docker-php-ext-install iconv mcrypt \
     && docker-php-ext-configure gd --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/include/ --with-gd=/usr/src/libgd-2.1.1/src/ \
     && docker-php-ext-install gd 
-RUN docker-php-ext-install bcmath ctype curl dom gettext hash iconv json mbstring mysqli opcache posix pspell  session shmop simplexml  soap sockets
-RUN docker-php-ext-install tidy tokenizer wddx 
-RUN docker-php-ext-install xsl zip
-RUN docker-php-ext-install pdo pdo_mysql 
-RUN docker-php-ext-install xml  xmlrpc xmlwriter 
+RUN docker-php-ext-install bcmath ctype curl dom gettext hash iconv json mbstring mysqli opcache posix pspell  session shmop simplexml  soap sockets tidy tokenizer wddx xsl zip pdo pdo_mysql xml  xmlrpc xmlwriter exif intl
+
+
 
 #RUN pecl install memcache && echo "extension=memcache.so" >> /usr/local/etc/php/conf.d/memcache.ini
 RUN pecl install geoip-1.1.1  && echo "extension=geoip.so" >> /usr/local/etc/php/conf.d/geoip.ini 
