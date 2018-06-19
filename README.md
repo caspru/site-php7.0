@@ -18,7 +18,6 @@ example.com:
  ports:
   - "1089:80"
   - "2200:22"
- command: "/usr/bin/python /usr/bin/supervisord -c /etc/supervisor/supervisord.conf"
  environment:
   - WEB_DOCUMENTROOT=/var/www/html/deploy/current # default /var/www/html
   - STATIC_BY_NGINX=1 #static send nginx (default 0)
