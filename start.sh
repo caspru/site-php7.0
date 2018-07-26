@@ -10,7 +10,6 @@ rm -f /run/crond.pid /run/apache2/apache2.pid
 if [ ! -z $SFTPDEV_PASSWD ]; then
 	echo Setting password sftpdev...
 	echo "sftpdev:$SFTPDEV_PASSWD" | chpasswd
-	unset $SFTPDEV_PASSWD
 fi
 
 [ -z $WEB_DOCUMENTROOT ] && export WEB_DOCUMENTROOT=/var/www/html
