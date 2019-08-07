@@ -65,7 +65,7 @@ RUN docker-php-ext-configure gd --with-freetype-dir=/usr/include/ --with-jpeg-di
 RUN docker-php-ext-install iconv mcrypt \
     && docker-php-ext-configure gd --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/include/ --with-gd=/usr/src/libgd-2.1.1/src/ \
     && docker-php-ext-install gd 
-RUN docker-php-ext-install bcmath ctype curl dom gettext hash iconv json mbstring mysqli opcache posix pspell  session shmop simplexml  soap sockets tidy tokenizer wddx xsl zip pdo pdo_mysql xml  xmlrpc xmlwriter exif intl
+RUN docker-php-ext-install bcmath ctype curl dom gettext hash iconv json mbstring mysqli opcache posix pspell  session shmop simplexml  soap sockets tidy tokenizer wddx xsl zip pdo pdo_mysql xml  xmlrpc xmlwriter exif intl xdebug
 
 
 
@@ -75,6 +75,9 @@ RUN pecl install geoip-1.1.1  && echo "extension=geoip.so" >> /usr/local/etc/php
 
 
 RUN a2enmod rpaf rewrite
+RUN echo "RPAFenable On" > /etc/apache2/conf-enabled/remoteip.conf; \
+    echo "RPAFproxy_ips 127.0.0.1 172.17.0.1" >> /etc/apache2/conf-enabled/remoteip.conf
+
 ADD apache-security.conf /etc/apache2/conf-enabled/security.conf
 
 ADD supervisord.conf /etc/supervisor/
